@@ -61,11 +61,12 @@ export default class BlockstackUser extends Model {
     return new Promise((resolve, reject) => {
       const resolveUser = (user: BlockstackUser,
                            _resolve: (value?: {} | PromiseLike<{}>) => void) => {
-        user.save().then(() => {
-          GroupMembership.cacheKeys().then(() => {
-            _resolve(user);
-          });
-        });
+                             console.log(user)
+        // user.save().then(() => {
+        //   GroupMembership.cacheKeys().then(() => {
+        //     _resolve(user);
+        //   });
+        // });
       };
       try {
         const user = this.currentUser();
@@ -81,18 +82,17 @@ export default class BlockstackUser extends Model {
             profile,
             publicKey,
           });
-          console.log(user);
-          // if (!user.attrs.personalSigningKeyId) {
-          //   user.createSigningKey().then((key) => {
-          //     addPersonalSigningKey(key);
-          //     resolveUser(user, resolve);
-          //   });
-          // } else {
-          //   SigningKey.findById(user.attrs.personalSigningKeyId).then((key: SigningKey) => {
-          //     addPersonalSigningKey(key);
-          //     resolveUser(user, resolve);
-          //   });
-          // }
+          if (!user.attrs.personalSigningKeyId) {
+            user.createSigningKey().then((key) => {
+              addPersonalSigningKey(key);
+              resolveUser(user, resolve);
+            });
+          } else {
+            SigningKey.findById(user.attrs.personalSigningKeyId).then((key: SigningKey) => {
+              addPersonalSigningKey(key);
+              resolveUser(user, resolve);
+            });
+          }
         });
       } catch (error) {
         reject(error);
