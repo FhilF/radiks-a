@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+// import uuid from 'uuid/v4';
 import { getPublicKeyFromPrivate } from 'blockstack/lib/keys';
 import { signECDSA } from 'blockstack/lib/encryption';
 import EventEmitter from 'wolfy87-eventemitter';
@@ -13,6 +13,9 @@ import Streamer from './streamer';
 import { Schema, Attrs } from './types/index';
 
 const EVENT_NAME = 'MODEL_STREAM_EVENT';
+
+/* eslint @typescript-eslint/no-var-requires: "off" */
+const { v4: uuidv4 } = require('uuid');
 
 interface FetchOptions {
   decrypt?: boolean
@@ -105,7 +108,7 @@ export default class Model {
     const { schema, defaults } = this.constructor as typeof Model;
     const name = this.modelName();
     this.schema = schema;
-    this._id = attrs._id || uuid().replace('-', '');
+    this._id = attrs._id || uuidv4().replace('-', '');
     this.attrs = {
       ...defaults,
       ...attrs,
