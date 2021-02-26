@@ -53,7 +53,7 @@
   "peerDependencies": {
     "blockstack": "^19.2.7",
     "@stacks/connect": "^4.3.15",
-    "@stacks/storage": "^1.2.3"
+    "@stacks/storage": "^1.2.2"
   },
   "scripts": {
     "build": "rimraf -rf lib && yarn compile && yarn typescript",
