@@ -1,31 +1,28 @@
 // import uuid from 'uuid/v4';
-import { getPublicKeyFromPrivate } from "blockstack/lib/keys";
-import { signECDSA } from "blockstack/lib/encryption";
-import EventEmitter from "wolfy87-eventemitter";
-import { Storage } from "@stacks/storage";
+import { getPublicKeyFromPrivate } from 'blockstack/lib/keys';
+import { signECDSA } from 'blockstack/lib/encryption';
+import EventEmitter from 'wolfy87-eventemitter';
 
 import {
-  encryptObject,
-  decryptObject,
-  userGroupKeys,
-  requireUserSession,
-  requireStorage,
-} from "./helpers";
-import { sendNewGaiaUrl, find, count, FindQuery, destroyModel } from "./api";
-import Streamer from "./streamer";
-import { Schema, Attrs } from "./types/index";
+  encryptObject, decryptObject, userGroupKeys, requireUserSession, requireStorage,
+} from './helpers';
+import {
+  sendNewGaiaUrl, find, count, FindQuery, destroyModel,
+} from './api';
+import Streamer from './streamer';
+import { Schema, Attrs } from './types/index';
 
-const EVENT_NAME = "MODEL_STREAM_EVENT";
+const EVENT_NAME = 'MODEL_STREAM_EVENT';
 
 /* eslint @typescript-eslint/no-var-requires: "off" */
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 
 interface FetchOptions {
-  decrypt?: boolean;
+  decrypt?: boolean
 }
 
 interface Event {
-  data: string;
+  data: string
 }
 
 export default class Model {
@@ -37,6 +34,7 @@ export default class Model {
   _id: string;
   attrs: Attrs;
 
+
   static fromSchema(schema: Schema) {
     this.schema = schema;
     return this;
@@ -44,7 +42,7 @@ export default class Model {
 
   static async fetchList<T extends Model>(
     _selector: FindQuery = {},
-    { decrypt = true }: FetchOptions = {}
+    { decrypt = true }: FetchOptions = {},
   ) {
     const selector: FindQuery = {
       ..._selector,
@@ -65,7 +63,7 @@ export default class Model {
 
   static async findOne<T extends Model>(
     _selector: FindQuery = {},
-    options: FetchOptions = { decrypt: true }
+    options: FetchOptions = { decrypt: true },
   ) {
     const selector: FindQuery = {
       ..._selector,
@@ -75,10 +73,7 @@ export default class Model {
     return results[0];
   }
 
-  static async findById<T extends Model>(
-    _id: string,
-    fetchOptions?: Record<string, any>
-  ) {
+  static async findById<T extends Model>(_id: string, fetchOptions?: Record<string, any>) {
     const Clazz = this;
     const model: Model = new Clazz({ _id });
     return model.fetch(fetchOptions);
@@ -113,7 +108,7 @@ export default class Model {
     const { schema, defaults } = this.constructor as typeof Model;
     const name = this.modelName();
     this.schema = schema;
-    this._id = attrs._id || uuidv4().replace("-", "");
+    this._id = attrs._id || uuidv4().replace('-', '');
     this.attrs = {
       ...defaults,
       ...attrs,
@@ -146,8 +141,7 @@ export default class Model {
   }
 
   saveFile(encrypted: Record<string, any>) {
-    const userSession = requireUserSession();
-    const storage = new Storage({ userSession });
+    const storage = requireStorage();
     return storage.putFile(this.blockstackPath(), JSON.stringify(encrypted), {
       encrypt: false,
       dangerouslyIgnoreEtag: true,
@@ -208,7 +202,7 @@ export default class Model {
     if (this.attrs.updatedAt) {
       contentToSign.push(this.attrs.updatedAt);
     }
-    const { signature } = signECDSA(privateKey, contentToSign.join("-"));
+    const { signature } = signECDSA(privateKey, contentToSign.join('-'));
     this.attrs.radiksSignature = signature;
     return this;
   }
@@ -255,8 +249,7 @@ export default class Model {
     const keys = userGroupKeys();
     if (this.attrs.signingKeyId === keys.personal._id) {
       return true;
-    }
-    if (this.attrs.userGroupId) {
+    } if (this.attrs.userGroupId) {
       let isOwned = false;
       Object.keys(keys.userGroups).forEach((groupId) => {
         if (groupId === this.attrs.userGroupId) {
@@ -267,6 +260,7 @@ export default class Model {
     }
     return false;
   }
+
 
   static onStreamEvent = (_this, [event]) => {
     try {
@@ -285,7 +279,7 @@ export default class Model {
     } catch (error) {
       // console.error(error.message);
     }
-  };
+  }
 
   static addStreamListener(callback: () => void) {
     if (!this.emitter) {
@@ -313,8 +307,8 @@ export default class Model {
   }
 
   // @abstract
-  beforeSave() {}
+  beforeSave() { }
 
   // @abstract
-  afterFetch() {}
+  afterFetch() { }
 }
