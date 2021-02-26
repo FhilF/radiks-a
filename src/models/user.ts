@@ -69,31 +69,31 @@ export default class BlockstackUser extends Model {
       };
       try {
         const user = this.currentUser();
-        console.log(user);
-        // user.fetch().catch(() => {
-        //   // console.error('caught error', e);
-        // }).finally(() => {
-        //   // console.log(user.attrs);
-        //   const userData = loadUserData();
-        //   const { username, profile, appPrivateKey } = userData;
-        //   const publicKey = getPublicKeyFromPrivate(appPrivateKey);
-        //   user.update({
-        //     username,
-        //     profile,
-        //     publicKey,
-        //   });
-        //   if (!user.attrs.personalSigningKeyId) {
-        //     user.createSigningKey().then((key) => {
-        //       addPersonalSigningKey(key);
-        //       resolveUser(user, resolve);
-        //     });
-        //   } else {
-        //     SigningKey.findById(user.attrs.personalSigningKeyId).then((key: SigningKey) => {
-        //       addPersonalSigningKey(key);
-        //       resolveUser(user, resolve);
-        //     });
-        //   }
-        // });
+        user.fetch().catch(() => {
+          // console.error('caught error', e);
+        }).finally(() => {
+          // console.log(user.attrs);
+          const userData = loadUserData();
+          const { username, profile, appPrivateKey } = userData;
+          const publicKey = getPublicKeyFromPrivate(appPrivateKey);
+          user.update({
+            username,
+            profile,
+            publicKey,
+          });
+          console.log(user);
+          // if (!user.attrs.personalSigningKeyId) {
+          //   user.createSigningKey().then((key) => {
+          //     addPersonalSigningKey(key);
+          //     resolveUser(user, resolve);
+          //   });
+          // } else {
+          //   SigningKey.findById(user.attrs.personalSigningKeyId).then((key: SigningKey) => {
+          //     addPersonalSigningKey(key);
+          //     resolveUser(user, resolve);
+          //   });
+          // }
+        });
       } catch (error) {
         reject(error);
       }
