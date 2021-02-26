@@ -16,7 +16,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-typescript": "^7.3.3",
     "@stacks/connect": "^4.3.15",
-    "@stacks/storage": "^1.2.3",
+    "@stacks/storage": "^1.2.2",
     "@types/jest": "^24.0.11",
     "@types/node": "^14.14.31",
     "@types/qs": "^6.5.1",
