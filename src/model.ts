@@ -150,6 +150,7 @@ export default class Model {
     const storage = new Storage({ userSession });
     return storage.putFile(this.blockstackPath(), JSON.stringify(encrypted), {
       encrypt: false,
+      dangerouslyIgnoreEtag: true,
     });
   }
 
