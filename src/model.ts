@@ -142,9 +142,11 @@ export default class Model {
 
   saveFile(encrypted: Record<string, any>) {
     const storage = requireStorage();
-    return storage.putFile(this.blockstackPath(), JSON.stringify(encrypted), {
-      encrypt: false,
-    });
+    console.log(storage)
+    return 'test';
+    // return storage.putFile(this.blockstackPath(), JSON.stringify(encrypted), {
+    //   encrypt: false,
+    // });
   }
 
   deleteFile() {

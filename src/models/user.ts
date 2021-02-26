@@ -61,12 +61,11 @@ export default class BlockstackUser extends Model {
     return new Promise((resolve, reject) => {
       const resolveUser = (user: BlockstackUser,
                            _resolve: (value?: {} | PromiseLike<{}>) => void) => {
-                             console.log(user)
-        // user.save().then(() => {
-        //   GroupMembership.cacheKeys().then(() => {
-        //     _resolve(user);
-        //   });
-        // });
+        user.save().then(() => {
+          GroupMembership.cacheKeys().then(() => {
+            _resolve(user);
+          });
+        });
       };
       try {
         const user = this.currentUser();
