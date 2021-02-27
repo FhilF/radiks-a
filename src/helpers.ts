@@ -93,8 +93,8 @@ export const encryptObject = async (model: Model) => {
     
 
     const keyData = {
-      iv: cryptoRandomString({ length: 16 }),
-      key: cryptoRandomString({ length: 32 }),
+      iv: crypto.randomBytes(16),
+      key: crypto.randomBytes(32)
     };
 
     const cipher = crypto.createCipheriv(
