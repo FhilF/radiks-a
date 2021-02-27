@@ -1,5 +1,5 @@
 import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
-import crypto from 'crypto'
+import * as crypto from 'crypto';
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
