@@ -46,7 +46,7 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     ...encrypted,
   };
   const { schema } = model;
-  Object.keys(encrypted).forEach((key) => {
+  await Promise.all(Object.keys(model.schema).map(async (key, i) => {
     const value = encrypted[key];
     const schemaValue = schema[key];
     let clazz = schemaValue;
@@ -56,46 +56,18 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     }
     if (clazz && schemaAttribute && !schemaAttribute.decrypted) {
       try {
-        const decryptedValue = (decryptECIES(privateKey, value) as unknown) as string;
+        const decryptedValue = await (decryptECIES(privateKey, value) as unknown) as string;
         decrypted[key] = stringToValue(decryptedValue, clazz);
       } catch (error) {
         console.debug(`Decryption error for key: '${key}': ${error.message}`); // eslint-disable-line
         decrypted[key] = value;
       }
     }
-  });
+  }));
+  
   return decrypted;
 };
 
-function aes256CbcEncrypt(iv, key, plaintext) {
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-  return Buffer.concat([cipher.update(plaintext), cipher.final()]);
-}
-
-function getHexFromBN(bnInput) {
-  const hexOut = bnInput.toString('hex');
-  if (hexOut.length === 64) {
-      return hexOut;
-  }
-  else if (hexOut.length < 64) {
-      // pad with leading zeros
-      // the padStart function would require node 9
-      const padding = '0'.repeat(64 - hexOut.length);
-      return `${padding}${hexOut}`;
-  }
-  else {
-      throw new Error('Generated a > 32-byte BN for encryption. Failing.');
-  }
-}
-
-function sharedSecretToKeys(sharedSecret) {
-  // generate mac and encryption key from shared secret
-  const hashedSecret = crypto.createHash('sha512').update(sharedSecret).digest();
-  return {
-    encryptionKey: hashedSecret.slice(0, 32),
-    hmacKey: hashedSecret.slice(32)
-  };
-}
 
 export const encryptObject = async (model: Model) => {
   const publicKey = await model.encryptionPublicKey();
