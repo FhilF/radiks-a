@@ -75,7 +75,9 @@ export const encryptObject = async (model: Model) => {
       return;
     }
     const stringValue = valueToString(value, clazz);
-    encrypted[key] = encryptECIES(publicKey, stringValue, null, null);
+    console.log(encrypted);
+    console.log(schemaValue)
+    // encrypted[key] = encryptECIES(publicKey, stringValue, null, null);
   });
   return encrypted;
 };
