@@ -86,12 +86,26 @@ export const encryptObject = async (model: Model) => {
 
     const stringValue = valueToString(value, clazz);
 
-    const ivdata = crypto.randomBytes(256);
-    const kData = crypto.randomBytes(256);
+    // const ivdata = crypto.randomBytes(256);
+    // const kData = crypto.randomBytes(256);
+    
+
+    let ivdata = '';
+    let kData = ''
+
+    crypto.randomBytes(16, function(err, buffer) {
+      ivdata = buffer.toString('hex');
+    });
+
+    crypto.randomBytes(32, function(err, buffer) {
+      kData = buffer.toString('hex');
+    });
+
     const keyData = {
-      iv: ivdata.toString('hex'),
-      key: kData.toString('hex'),
+      iv: ivdata,
+      key: kData,
     };
+
     const cipher = crypto.createCipheriv(
       'aes-256-cbc',
       keyData.key,
