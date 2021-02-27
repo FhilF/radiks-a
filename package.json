@@ -29,7 +29,7 @@
     "babel-jest": "^23.6.0",
     "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "blockstack": "^19.2.7",
+    "blockstack": "^21.1.1",
     "dotenv": "^6.1.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -51,7 +51,7 @@
     "wolfy87-eventemitter": "^5.2.5"
   },
   "peerDependencies": {
-    "blockstack": "^19.2.7",
+    "blockstack": "^21.0.0",
     "@stacks/connect": "^4.3.15",
     "@stacks/storage": "^1.2.2"
   },

@@ -43,7 +43,7 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     }
     if (clazz && schemaAttribute && !schemaAttribute.decrypted) {
       try {
-        const decryptedValue = decryptECIES(privateKey, value) as string;
+        const decryptedValue = decryptECIES(privateKey, value) as unknown as string;
         decrypted[key] = stringToValue(decryptedValue, clazz);
       } catch (error) {
         console.debug(`Decryption error for key: '${key}': ${error.message}`); // eslint-disable-line
@@ -75,7 +75,7 @@ export const encryptObject = async (model: Model) => {
       return;
     }
     const stringValue = valueToString(value, clazz);
-    encrypted[key] = encryptECIES(publicKey, stringValue);
+    encrypted[key] = encryptECIES(publicKey, stringValue, null, null);
   });
   return encrypted;
 };
