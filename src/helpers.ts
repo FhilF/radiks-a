@@ -3,7 +3,6 @@ import {
   decryptECIES,
   hexStringToECPair,
 } from '@stacks/encryption';
-import cryptoRandomString from 'crypto-random-string';
 import crypto from 'crypto';
 import { getConfig } from './config';
 import Model from './model';
@@ -11,6 +10,7 @@ import { SchemaAttribute } from './types';
 
 export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
 
+const cryptoRandomString = require('crypto-random-string');
 
 const valueToString = (value: any, clazz: any) => {
   if (clazz === Boolean) {
