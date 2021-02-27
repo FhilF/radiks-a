@@ -1,5 +1,9 @@
-import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
-import crypto from 'crypto'
+import {
+  encryptECIES,
+  decryptECIES,
+  hexStringToECPair,
+} from '@stacks/encryption';
+import crypto from 'crypto';
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
@@ -9,9 +13,11 @@ export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
 const valueToString = (value: any, clazz: any) => {
   if (clazz === Boolean) {
     return value ? 'true' : 'false';
-  } if (clazz === Number) {
+  }
+  if (clazz === Number) {
     return String(value);
-  } if (clazz === Array || clazz === Object) {
+  }
+  if (clazz === Array || clazz === Object) {
     return JSON.stringify(value);
   }
   return value;
@@ -20,9 +26,11 @@ const valueToString = (value: any, clazz: any) => {
 const stringToValue = (value: string, clazz: any) => {
   if (clazz === Boolean) {
     return value === 'true';
-  } if (clazz === Number) {
+  }
+  if (clazz === Number) {
     return parseFloat(value);
-  } if (clazz === Array || clazz === Object) {
+  }
+  if (clazz === Array || clazz === Object) {
     return JSON.parse(value);
   }
   return value;
@@ -44,7 +52,7 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     }
     if (clazz && schemaAttribute && !schemaAttribute.decrypted) {
       try {
-        const decryptedValue = decryptECIES(privateKey, value) as unknown as string;
+        const decryptedValue = (decryptECIES(privateKey, value) as unknown) as string;
         decrypted[key] = stringToValue(decryptedValue, clazz);
       } catch (error) {
         console.debug(`Decryption error for key: '${key}': ${error.message}`); // eslint-disable-line
@@ -78,14 +86,20 @@ export const encryptObject = async (model: Model) => {
 
     const stringValue = valueToString(value, clazz);
 
+    const ivdata = crypto.randomBytes(256);
+    const kData = crypto.randomBytes(256);
     const keyData = {
-      iv: crypto.randomBytes(16),
-      key: crypto.randomBytes(32),
+      iv: ivdata.toString('hex'),
+      key: kData.toString('hex'),
     };
-    const cipher = crypto.createCipheriv('aes-256-cbc', keyData.key, keyData.iv);
-    const cipherText = cipher.update(stringValue, 'utf-8', 'hex') + cipher.final('hex')
+    const cipher = crypto.createCipheriv(
+      'aes-256-cbc',
+      keyData.key,
+      keyData.iv,
+    );
+    const cipherText = cipher.update(stringValue, 'utf-8', 'hex') + cipher.final('hex');
     // @ts-ignore
-    encrypted[key] = encryptECIES(publicKey, stringValue, true, cipherText.toString('hex'));
+    encrypted[key] = encryptECIES(publicKey, stringValue, true, cipherText);
   });
   return encrypted;
 };
