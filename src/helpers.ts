@@ -104,7 +104,8 @@ export const encryptObject = async (model: Model) => {
     ...object,
     _id: model._id,
   };
-  Object.keys(model.schema).forEach((key) => {
+
+  await Promise.all(Object.keys(model.schema).map(async (key, i) => {
     const schemaValue = model.schema[key];
     const schemaAttribute = model.schema[key] as SchemaAttribute;
     const value = object[key];
@@ -119,11 +120,11 @@ export const encryptObject = async (model: Model) => {
     }
 
     const stringValue = valueToString(value, clazz);
-
     const plainText = stringValue instanceof Buffer ? Buffer.from(stringValue) : Buffer.from(stringValue);
-    const result = encryptECIES(publicKey, plainText, true, 'hex');
+    const result = await encryptECIES(publicKey, plainText, true, 'hex');
     encrypted[key] = result;
-  });
+  }));
+
   return encrypted;
 };
 
