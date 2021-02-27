@@ -1,7 +1,8 @@
-import { encryptECIES, decryptECIES } from 'blockstack/lib/encryption';
+import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
+import crypto from 'crypto'
 
 export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
 
@@ -75,11 +76,16 @@ export const encryptObject = async (model: Model) => {
       return;
     }
     const stringValue = valueToString(value, clazz);
-    console.log(encrypted);
-    console.log(schemaValue)
-    console.log(stringValue)
-    console.log(value)
-    // encrypted[key] = encryptECIES(publicKey, stringValue, null, null);
+    const keyData = {
+      iv: crypto.randomBytes(16),
+      key: crypto.randomBytes(32),
+    };
+    const cipher = crypto.createCipheriv('aes-256-cbc', keyData.key, keyData.iv);
+    const cipherText = cipher.update('test.json', 'utf-8', 'hex') + cipher.final('hex')
+
+    // @ts-ignore
+    encrypted[key] = encryptECIES(publicKey, stringValue, true, cipherText);
+    ;
   });
   return encrypted;
 };
