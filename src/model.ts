@@ -144,7 +144,7 @@ export default class Model {
     const storage = requireStorage();
     return storage.putFile(this.blockstackPath(), JSON.stringify(encrypted), {
       encrypt: false,
-      dangerouslyIgnoreEtag: true,
+      // dangerouslyIgnoreEtag: true,
     });
   }
 
