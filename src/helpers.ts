@@ -119,7 +119,7 @@ export const encryptObject = async (model: Model) => {
       return;
     }
 
-    const stringValue = valueToString(value, clazz);
+    const stringValue = valueToString(await value, clazz);
     const plainText = await stringValue instanceof Buffer ? Buffer.from(stringValue) : Buffer.from(stringValue);
     
     const isString = (typeof (plainText) === 'string');
