@@ -1,8 +1,8 @@
 import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
+import crypto from 'crypto'
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
-import crypto from 'crypto'
 
 export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
 
