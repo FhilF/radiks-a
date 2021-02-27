@@ -1,10 +1,12 @@
 import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
-import * as crypto from 'crypto';
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
 
 export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
+
+
+const crypto = require('crypto'); 
 
 const valueToString = (value: any, clazz: any) => {
   if (clazz === Boolean) {
