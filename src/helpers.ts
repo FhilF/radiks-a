@@ -92,10 +92,9 @@ export const encryptObject = async (model: Model) => {
     }
 
     const stringValue = valueToString(value, clazz);
-    const plainText = stringValue instanceof Buffer ? Buffer.from(stringValue) : Buffer.from(stringValue);
     
-    const isString = (typeof (plainText) === 'string');
-    const result = await encryptECIES(publicKey, plainText, isString, 'hex');
+    const isString = (typeof (stringValue) === 'string');
+    const result = await encryptECIES(publicKey, stringValue, isString, 'hex');
     encrypted[key] = result;
   }));
 
