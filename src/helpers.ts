@@ -137,10 +137,11 @@ export const encryptObject = async (model: Model) => {
       key: crypto.randomBytes(32)
     };
 
-    const cipherText = aes256CbcEncrypt(crypto.randomBytes(16), sharedKeys.encryptionKey, plainText)
-    console.log(publicKey, stringValue, true, cipherText)
+    const cipherText = aes256CbcEncrypt(crypto.randomBytes(16), sharedKeys.encryptionKey, plainText);
     // @ts-ignore
-    // encrypted[key] = encryptECIES(publicKey, stringValue, true, cipherText);
+    const result = encryptECIES(publicKey, stringValue, true, cipherText.toString('hex'));
+    console.log(result);
+    encrypted[key] = result;
   });
   return encrypted;
 };
