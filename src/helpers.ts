@@ -57,7 +57,9 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     if (clazz && schemaAttribute && !schemaAttribute.decrypted) {
       try {
         const decryptedValue = (await decryptECIES(privateKey, value) as unknown) as string;
-        decrypted[key] = stringToValue(decryptedValue, clazz).toString();
+        let res = stringToValue(decryptedValue, clazz);
+        res = res instanceof Buffer ? res : Buffer.from(res);
+        decrypted[key] = res.toString();
       } catch (error) {
         console.debug(`Decryption error for key: '${key}': ${error.message}`); // eslint-disable-line
         decrypted[key] = value;
