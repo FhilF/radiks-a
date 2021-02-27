@@ -108,7 +108,7 @@ export const encryptObject = async (model: Model) => {
   await Promise.all(Object.keys(model.schema).map(async (key, i) => {
     const schemaValue = model.schema[key];
     const schemaAttribute = model.schema[key] as SchemaAttribute;
-    const value = object[key];
+    const value = await object[key];
     let clazz = schemaValue;
     if (typeof value === 'undefined') return;
     if (schemaAttribute.type) {
@@ -119,8 +119,8 @@ export const encryptObject = async (model: Model) => {
       return;
     }
 
-    const stringValue = valueToString(await value, clazz);
-    const plainText = await stringValue instanceof Buffer ? Buffer.from(stringValue) : Buffer.from(stringValue);
+    const stringValue = valueToString(value, clazz);
+    const plainText = stringValue instanceof Buffer ? Buffer.from(stringValue) : Buffer.from(stringValue);
     
     const isString = (typeof (plainText) === 'string');
     const result = await encryptECIES(publicKey, plainText, isString, 'hex');
