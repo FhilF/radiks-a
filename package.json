@@ -30,7 +30,7 @@
     "babel-jest": "^23.6.0",
     "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "blockstack": "^21.1.1",
+    "blockstack": "^19.2.7",
     "dotenv": "^6.1.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",

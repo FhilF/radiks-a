@@ -1,12 +1,9 @@
-import { encryptECIES, decryptECIES, hexStringToECPair } from '@stacks/encryption';
+import { encryptECIES, decryptECIES } from 'blockstack/lib/encryption';
 import { getConfig } from './config';
 import Model from './model';
 import { SchemaAttribute } from './types';
 
 export const GROUP_MEMBERSHIPS_STORAGE_KEY = 'GROUP_MEMBERSHIPS_STORAGE_KEY';
-
-
-const crypto = require('crypto'); 
 
 const valueToString = (value: any, clazz: any) => {
   if (clazz === Boolean) {
@@ -46,7 +43,7 @@ export const decryptObject = async (encrypted: any, model: Model) => {
     }
     if (clazz && schemaAttribute && !schemaAttribute.decrypted) {
       try {
-        const decryptedValue = decryptECIES(privateKey, value) as unknown as string;
+        const decryptedValue = decryptECIES(privateKey, value) as string;
         decrypted[key] = stringToValue(decryptedValue, clazz);
       } catch (error) {
         console.debug(`Decryption error for key: '${key}': ${error.message}`); // eslint-disable-line
@@ -78,16 +75,7 @@ export const encryptObject = async (model: Model) => {
       return;
     }
     const stringValue = valueToString(value, clazz);
-    const keyData = {
-      iv: crypto.randomBytes(16),
-      key: crypto.randomBytes(32),
-    };
-    const cipher = crypto.createCipheriv('aes-256-cbc', keyData.key, keyData.iv);
-    const cipherText = cipher.update('test.json', 'utf-8', 'hex') + cipher.final('hex')
-
-    // @ts-ignore
-    encrypted[key] = encryptECIES(publicKey, stringValue, true, cipherText);
-    ;
+    encrypted[key] = encryptECIES(publicKey, stringValue);
   });
   return encrypted;
 };
