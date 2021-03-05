@@ -24,8 +24,8 @@ export default class GroupInvitation extends Model {
     updatable: false,
   }
 
-  static async makeInvitation(identityAddress: string, userGroup: UserGroup) {
-    const user = new User({ _id: identityAddress });
+  static async makeInvitation(username: string, userGroup: UserGroup) {
+    const user = new User({ _id: username });
     await user.fetch({ decrypt: false });
     const { publicKey } = user.attrs;
     const invitation = new this({
@@ -46,7 +46,7 @@ export default class GroupInvitation extends Model {
     }
     const groupMembership = new GroupMembership({
       userGroupId: this.attrs.userGroupId,
-      identityAddress: loadUserData().identityAddress,
+      username: loadUserData().username,
       signingKeyPrivateKey: this.attrs.signingKeyPrivateKey,
       signingKeyId: this.attrs.signingKeyId,
     });

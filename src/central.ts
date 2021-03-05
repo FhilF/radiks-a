@@ -5,9 +5,9 @@ import { saveCentral, fetchCentral } from './api';
 
 class Central {
   static save(key: string, value: Record<string, any>) {
-    const { identityAddress, signature } = this.makeSignature(key);
+    const { username, signature } = this.makeSignature(key);
     return saveCentral({
-      identityAddress,
+      username,
       key,
       value,
       signature,
@@ -15,20 +15,20 @@ class Central {
   }
 
   static get(key: string) {
-    const { identityAddress, signature } = this.makeSignature(key);
+    const { username, signature } = this.makeSignature(key);
 
-    return fetchCentral(key, identityAddress, signature);
+    return fetchCentral(key, username, signature);
   }
 
   static makeSignature(key: string) {
     const { userSession } = getConfig();
-    const { appPrivateKey, identityAddress } = userSession.loadUserData();
-    const message = `${identityAddress}-${key}`;
+    const { appPrivateKey, username } = userSession.loadUserData();
+    const message = `${username}-${key}`;
 
     const { signature } = signECDSA(appPrivateKey, message);
 
     return {
-      identityAddress, signature,
+      username, signature,
     };
   }
 }

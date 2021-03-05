@@ -46,7 +46,7 @@ export const count = async (query: FindQuery) => {
 
 interface CentralSaveData {
   signature: string,
-  identityAddress: string,
+  username: string,
   key: string,
   value: any,
 }
@@ -66,9 +66,9 @@ export const saveCentral = async (data: CentralSaveData) => {
   return success;
 };
 
-export const fetchCentral = async (key: string, identityAddress: string, signature: string) => {
+export const fetchCentral = async (key: string, username: string, signature: string) => {
   const { apiServer } = getConfig();
-  const queryString = stringify({ identityAddress, signature });
+  const queryString = stringify({ username, signature });
   const url = `${apiServer}/radiks/central/${key}?${queryString}`;
   const response = await fetch(url);
   const value = await response.json();
@@ -83,6 +83,5 @@ export const destroyModel = async (model: Model) => {
     method: 'DELETE',
   });
   const data = await response.json();
-  console.log(data);
   return data.success;
 };
