@@ -13,7 +13,7 @@ export default class BlockstackUser extends Model {
   static className = 'BlockstackUser';
 
   static schema: Schema = {
-    username: {
+    identityAddress: {
       type: String,
       decrypted,
     },
@@ -38,12 +38,12 @@ export default class BlockstackUser extends Model {
       return null;
     }
 
-    const { username, profile, appPrivateKey } = userData;
+    const { identityAddress, profile, appPrivateKey } = userData;
     const publicKey = getPublicKeyFromPrivate(appPrivateKey);
     const Clazz = this;
     const user = new Clazz({
-      _id: username,
-      username,
+      _id: identityAddress,
+      identityAddress,
       publicKey,
       profile,
     });
@@ -74,10 +74,10 @@ export default class BlockstackUser extends Model {
         }).finally(() => {
           // console.log(user.attrs);
           const userData = loadUserData();
-          const { username, profile, appPrivateKey } = userData;
+          const { identityAddress, profile, appPrivateKey } = userData;
           const publicKey = getPublicKeyFromPrivate(appPrivateKey);
           user.update({
-            username,
+            identityAddress,
             profile,
             publicKey,
           });

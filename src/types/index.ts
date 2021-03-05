@@ -24,7 +24,7 @@ export interface UserSession {
   loadUserData: () => {
     appPrivateKey: string,
     profile: Record<string, any>,
-    username: string,
+    identityAddress: string,
     hubUrl: string,
   },
 
